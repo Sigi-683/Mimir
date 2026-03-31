@@ -1,36 +1,38 @@
 import re
-
-def preprocess(raw_text):
-    split = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
-    preprocessed = []
-    for item in split:
-        preprocessed.append(item.strip())
-    return preprocessed
-
-
-def create_vocabulary(file):
-    with open("the-verdict.txt", "r", encoding="utf-8") as f:
-        raw_text = f.read()
     
-    preprocessed = preprocess(raw_text)
+class Tokenizer:
+    def __init__(self, file):
+        self.str_to_int = self.create_vocabulary(file)
+        self.int_to_str = {}
+        for s,i in self.str_to_int.items():
+            self.int_to_str[i] = s
 
-    vocab = {  }
-    index = 0
+    def preprocess(self, raw_text):
+        split = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
+        preprocessed = []
+        for item in split:
+            preprocessed.append(item.strip())
+        return preprocessed
 
-    for c in raw_text.split() :
-        if (not c in vocab.values()):
-            vocab[index] = c
-            index+=1
+    def create_vocabulary(self, file):
+        with open("the-verdict.txt", "r", encoding="utf-8") as f:
+            raw_text = f.read()
+        
+        preprocessed = self.preprocess(raw_text)
 
-    return vocab
+        vocab = {  }
+        index = 0
 
-    
-def tokenize():
-    vocab = create_vocabulary("the-verdict.txt")
+        for c in raw_text.split() :
+            if (not c in vocab.values()):
+                vocab[index] = c
+                index+=1
 
-    stop = 0
-    for item in range(len(vocab)):
-        print(vocab[item], ": ", item)
-        stop+=1
-        if (stop >= 50):
-            break
+        return vocab
+
+        def encode(self, text):
+            preprocessed = self.preprocess(text)
+            encoded = []
+            for s in preprocessed:
+                encoded.append(self.str_to_int[s])
+            return encoded
