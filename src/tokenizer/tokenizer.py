@@ -28,3 +28,15 @@ class Tokenizer:
         for s in preprocessed:
             encoded.append(self.str_to_int[s])
         return encoded
+
+    def decode(self, ids):
+        res = ""
+        if (len(res) > 0) :
+            res += self.str_to_int[0]
+
+        for i in ids[1:] :
+            res += " " + self.int_to_str[i]
+
+        res = re.sub(r'\s+([,.?!"()\'])', r'\1', res)
+        return res
+        
